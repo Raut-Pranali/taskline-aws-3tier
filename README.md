@@ -1,4 +1,4 @@
-# Taskline — Task Manager (AWS 3-Tier Demo App)
+# Taskline — Task Manager (AWS 3-Tier App)
 
 A minimal full-stack to-do app, built as the **application payload** for a
 highly available, secure 3-tier AWS architecture (Route 53 → WAF → ALB →
