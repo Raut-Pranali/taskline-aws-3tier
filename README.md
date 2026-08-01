@@ -30,15 +30,11 @@ web application firewall, and secure admin access — the same architectural pat
 production AWS environments.
 
 
-## 🎥 Demo Video
+## 🎥 Project Demo
 
+Watch the complete demo of the project here:
 
-
-
-
-
-
-
+👉 **[Click here to watch the demo](https://drive.google.com/file/d/1U3rHnguxHLsHMvM7L-7aRExKfZ-hvV6p/view?usp=sharing)**
 
 
 ## 🏗️ Architecture
