@@ -39,7 +39,9 @@ production AWS environments.
 
 ## 🏗️ Architecture
 
-![Uploading Infrastructure.png…]()
+
+<img width="980" height="1225" alt="image" src="https://github.com/user-attachments/assets/d346f280-0701-463f-867b-6dea972a4138" />
+
 
 
 
