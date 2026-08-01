@@ -1,81 +1,36 @@
-# Taskline — Task Manager (AWS 3-Tier App)
+# 🚀 Taskline — Highly Available 3-Tier Web Application on AWS
 
-A minimal full-stack to-do app, built as the **application payload** for a
-highly available, secure 3-tier AWS architecture (Route 53 → WAF → ALB →
-Auto Scaling Group → RDS Multi-AZ, with SSM/Bastion admin access).
+A full-stack task management app deployed on a secure, multi-tier AWS architecture — built to demonstrate
+hands-on cloud infrastructure design, not just application code.
 
-The app is intentionally simple — the real project is the infrastructure
-around it.
 
-## Stack
+## Table of Contents
 
-- **Frontend:** React + Vite, served as static files (via Nginx on EC2, or S3+CloudFront)
-- **Backend:** Node.js + Express REST API
-- **Database:** PostgreSQL (RDS Multi-AZ in production)
+* [Overview](https://github.com/Raut-Pranali/taskline-aws-3tier#overview)
+* [Demo Video](https://github.com/Raut-Pranali/taskline-aws-3tier#demo-video)
+* [Architecture](https://github.com/Raut-Pranali/taskline-aws-3tier#architecture)
+* [Features](https://github.com/Raut-Pranali/taskline-aws-3tier#-features)
+* [AWS Services Used](https://github.com/Raut-Pranali/taskline-aws-3tier#%EF%B8%8F-aws-services-used)
+* [Tech Stack](https://github.com/Raut-Pranali/taskline-aws-3tier#tech-stack)
+* [Challenges Solved](https://github.com/Raut-Pranali/taskline-aws-3tier#challenges-solved)
+* [Future Improvements](https://github.com/Raut-Pranali/taskline-aws-3tier#future-improvements)
 
-## Run locally
 
-**1. Database**
-```bash
-createdb todoapp
-psql -d todoapp -f backend/schema.sql
-```
+## 📋 Overview
 
-**2. Backend**
-```bash
-cd backend
-cp .env.example .env   # edit with your local DB credentials
-npm install
-npm run dev             # http://localhost:4000
-```
+Taskline is a full-stack task management application deployed on a secure, highly available, multi-tier
+AWS architecture — built manually through the AWS Console (no Infrastructure as Code) to demonstrate
+hands-on, practical cloud engineering skills.
 
-**3. Frontend**
-```bash
-cd frontend
-npm install
-npm run dev              # http://localhost:5173
-```
+The application itself is intentionally simple — a task manager with basic CRUD functionality. The real
+focus of this project is the **infrastructure it runs on**: a production-style 3-tier architecture with
+network isolation, load balancing, auto-scaling, a managed database, content delivery via CloudFront, a
+web application firewall, and secure admin access — the same architectural patterns used in real-world,
+production AWS environments.
 
-The frontend calls the API at `http://localhost:4000` by default. Override
-with a `.env` file containing `VITE_API_URL=http://localhost:4000` if needed.
+This project was built as a hands-on learning exercise following the AWS re/Start Program, applying
+core AWS concepts — VPC design, security group configuration, high availability, and least-privilege
+access control — to a real, working deployment rather than an isolated tutorial exercise.
 
-## API
 
-| Method | Path              | Description        |
-|--------|-------------------|---------------------|
-| GET    | /api/health       | Health check (used by ALB target group) |
-| GET    | /api/tasks        | List all tasks     |
-| POST   | /api/tasks        | Create a task       |
-| PATCH  | /api/tasks/:id    | Update a task (toggle done, edit)       |
-| DELETE | /api/tasks/:id    | Delete a task       |
 
-## Deploying onto the AWS architecture
-
-1. **RDS**: create a PostgreSQL Multi-AZ instance in your DB-only private
-   subnet. Run `backend/schema.sql` against it (via a bastion/SSM tunnel,
-   since it has no public access).
-2. **EC2 (app tier, private subnet, in the Auto Scaling Group)**:
-   - Install Node.js via user-data
-   - Pull this repo (or bake into an AMI)
-   - Set env vars (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_SSL=true`, etc.)
-     via SSM Parameter Store / Secrets Manager, not hardcoded
-   - Run backend with a process manager (e.g. `pm2`) behind Nginx on port 80,
-     proxying to the Express app on 4000
-   - Build the frontend (`npm run build`) and serve `dist/` via the same
-     Nginx, or push to S3 + CloudFront for a cleaner split
-3. **ALB**: target group health check → `/api/health`; listener on 80/443
-4. **WAF**: attach an AWS managed rule set (Core rule set + known bad inputs)
-   to the ALB
-5. **Auto Scaling Group**: launch template built from the EC2 setup above;
-   scale on target tracking (e.g. CPU 60%)
-6. **Admin access**: use SSM Session Manager instead of a public bastion
-   where possible — no open SSH port needed
-7. **Route 53**: point your domain's A record (alias) at the ALB
-
-## Demo checklist (for interviews / recording a walkthrough)
-
-- [ ] Hit the ALB DNS name / your domain, confirm the app loads and tasks CRUD works
-- [ ] Terminate one EC2 instance manually, watch ASG replace it automatically
-- [ ] Trigger a WAF managed rule (e.g. a basic SQLi-looking query string) and confirm it's blocked
-- [ ] Force an RDS failover (reboot with failover) and confirm the app recovers
-- [ ] Show CloudWatch metrics/alarms tied to the ASG scaling policy
