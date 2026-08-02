@@ -94,35 +94,41 @@ Watch the complete demo of the project here:
 | **Security Groups** | Act as instance-level firewalls enforcing least-privilege access between the ALB, EC2, and RDS tiers. |
 
 
-## 🔄 Project Workflow
+## Project Workflow
 
-### Request Flow (Runtime)
-
-1. **User** visits the application via a custom domain
-2. **Amazon Route 53** resolves the domain to the CloudFront distribution
-3. **Amazon CloudFront** serves cached static assets from the nearest edge location, or forwards the request onward for dynamic content
-4. **AWS WAF** inspects incoming requests and blocks malicious traffic before it reaches the application
-5. **Application Load Balancer (ALB)** forwards the request to a healthy EC2 instance, based on continuous health checks against `/api/health`
-6. **EC2 instance** (private app-tier subnet) — Nginx serves the React frontend directly, or proxies `/api/*` requests to the Express backend
-7. **Express backend** queries or updates data in **Amazon RDS (PostgreSQL)**, reachable only from the app-tier security group
-8. The response travels back through the same path to the user's browser
-
-### Admin Access Flow
-
-1. Administrator connects via **AWS Systems Manager (SSM) Session Manager**
-2. SSM provides a secure shell session to the private EC2 instance — no SSH port is exposed to the internet
-3. Admin can deploy updates, view logs, or troubleshoot directly on the instance
-
-### Deployment Workflow (How the Infrastructure Was Built)
-
-1. **VPC and subnets** — public and private subnets across Availability Zones, Internet Gateway, NAT Gateway, and route tables
-2. **Security groups** — strict access chain: Internet → ALB → App tier → Database tier
-3. **RDS PostgreSQL** — provisioned in the private DB subnet, schema loaded, connectivity verified
-4. **EC2 and app deployment** — Node.js and Nginx installed, application cloned from GitHub, backend connected to RDS
-5. **ALB and target group** — health check configured on `/api/health`, traffic routed to healthy instances
-6. **Auto Scaling Group** — launch template built from the working EC2 configuration, attached for automatic instance recovery
-7. **CloudFront and WAF** — content delivery and request filtering added at the edge
-8. **Route 53 and testing** — custom domain connected, failover and instance-replacement testing performed
+1. **Public User**
+   ↓
+2. **Amazon Route 53**
+   DNS resolves the domain
+   ↓
+3. **Amazon CloudFront**
+   Caches static content and improves performance
+   ↓
+4. **AWS Certificate Manager (ACM)**
+   Provides SSL/TLS certificate for HTTPS
+   ↓
+5. **AWS WAF**
+   Filters malicious requests before they reach the application
+   ↓
+6. **Application Load Balancer (ALB)**
+   Distributes incoming traffic
+   ↓
+7. **Auto Scaling Group**
+   Routes requests to healthy EC2 instances
+   ↓
+8. **React Frontend + Express.js Backend**
+   Processes user requests
+   ↓
+9. **Amazon RDS PostgreSQL**
+   Stores and retrieves application data
+   ↓
+10. **Backend sends response**
+    ↓
+11. **ALB**
+    ↓
+12. **CloudFront**
+    ↓
+13. **HTTPS Response to User**
 
 
 
