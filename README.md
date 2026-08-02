@@ -94,43 +94,139 @@ Watch the complete demo of the project here:
 | **Security Groups** | Act as instance-level firewalls enforcing least-privilege access between the ALB, EC2, and RDS tiers. |
 
 
-## Project Workflow
+## 📌 Project Workflow
 
-1. **Public User**
-   ↓
-2. **Amazon Route 53**
-   DNS resolves the domain
-   ↓
-3. **Amazon CloudFront**
-   Caches static content and improves performance
-   ↓
-4. **AWS Certificate Manager (ACM)**
-   Provides SSL/TLS certificate for HTTPS
-   ↓
-5. **AWS WAF**
-   Filters malicious requests before they reach the application
-   ↓
-6. **Application Load Balancer (ALB)**
-   Distributes incoming traffic
-   ↓
-7. **Auto Scaling Group**
-   Routes requests to healthy EC2 instances
-   ↓
-8. **React Frontend + Express.js Backend**
-   Processes user requests
-   ↓
-9. **Amazon RDS PostgreSQL**
-   Stores and retrieves application data
-   ↓
-10. **Backend sends response**
-    ↓
-11. **ALB**
-    ↓
-12. **CloudFront**
-    ↓
-13. **HTTPS Response to User**
+```text
+1. Public User
+        │
+        ▼
+2. Amazon Route 53
+   (DNS resolves the domain)
+        │
+        ▼
+3. Amazon CloudFront
+   (Caches static content and improves performance)
+        │
+        ▼
+4. AWS Certificate Manager (ACM)
+   (Provides SSL/TLS certificate for HTTPS)
+        │
+        ▼
+5. AWS WAF
+   (Filters malicious requests before reaching the application)
+        │
+        ▼
+6. Application Load Balancer (ALB)
+   (Distributes incoming traffic across healthy instances)
+        │
+        ▼
+7. Auto Scaling Group (EC2 Instances)
+   (Automatically scales application servers based on demand)
+        │
+        ▼
+8. React Frontend + Express.js Backend
+   (Processes user requests and business logic)
+        │
+        ▼
+9. Amazon RDS PostgreSQL
+   (Stores and retrieves application data)
+        │
+        ▼
+10. Backend Processes Response
+        │
+        ▼
+11. Application Load Balancer (ALB)
+        │
+        ▼
+12. Amazon CloudFront
+   (Delivers cached and dynamic content)
+        │
+        ▼
+13. HTTPS Response to User
+```
 
+## 👨‍💻 Admin Workflow
 
+```text
+1. Admin User
+        │
+        ▼
+2. Bastion Host / VPN
+   (Secure entry point to the private network)
+        │
+        ▼
+3. Private EC2 Instances
+   (SSH access for application management)
+        │
+        ├── Deploy or Update Application
+        ├── Install Packages & Dependencies
+        ├── Monitor Application & System Logs
+        ├── Restart Application Services
+        ├── Troubleshoot Server Issues
+        ├── Configure Security & System Settings
+        └── Access Amazon RDS PostgreSQL (when required)
+```
+
+## 🚀 Deployment Workflow
+
+```text
+1. Developer
+        │
+        ▼
+2. Push Source Code to GitHub
+   (React Frontend + Express.js Backend)
+        │
+        ▼
+3. Launch Bastion Host
+   (Secure administrative access)
+        │
+        ▼
+4. SSH into Private EC2 Instances
+        │
+        ▼
+5. Clone GitHub Repository
+   (Download application source code)
+        │
+        ▼
+6. Install Required Dependencies
+   (Node.js, npm, PostgreSQL client, etc.)
+        │
+        ▼
+7. Configure Environment Variables
+   (Database credentials, API settings, Ports)
+        │
+        ▼
+8. Build & Start Application
+   (React Build + Express.js Server)
+        │
+        ▼
+9. Register EC2 Instances with ALB Target Group
+   (Health checks verify application availability)
+        │
+        ▼
+10. Configure Auto Scaling Group
+    (Launch Template & Desired Capacity)
+        │
+        ▼
+11. Configure Route 53
+    (Map custom domain to CloudFront)
+        │
+        ▼
+12. Configure CloudFront Distribution
+    (Serve application through CDN)
+        │
+        ▼
+13. Attach ACM SSL Certificate
+    (Enable secure HTTPS communication)
+        │
+        ▼
+14. Associate AWS WAF
+    (Protect application from common web attacks)
+        │
+        ▼
+15. Application Successfully Deployed
+    (Accessible via HTTPS using custom domain)
+```
 
 ## 🛠️ Tech Stack
 
