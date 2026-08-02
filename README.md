@@ -15,6 +15,7 @@ hands-on cloud infrastructure design, not just application code.
 * [Tech Stack](https://github.com/Raut-Pranali/taskline-aws-3tier#tech-stack)
 * [Challenges Solved](https://github.com/Raut-Pranali/taskline-aws-3tier#challenges-solved)
 * [Future Improvements](https://github.com/Raut-Pranali/taskline-aws-3tier#future-improvements)
+  
 
 
 ## 📋 Overview
@@ -30,11 +31,13 @@ web application firewall, and secure admin access — the same architectural pat
 production AWS environments.
 
 
+
 ## 🎥 Project Demo
 
 Watch the complete demo of the project here:
 
 👉 **[Click here to watch the demo](https://drive.google.com/file/d/1U3rHnguxHLsHMvM7L-7aRExKfZ-hvV6p/view?usp=sharing)**
+
 
 
 ## 🏗️ Architecture
@@ -71,6 +74,7 @@ Watch the complete demo of the project here:
 - **Custom domain with HTTPS** — Route 53 DNS routing combined with an AWS Certificate Manager (ACM) SSL/TLS certificate
 
 
+
 ## ☁️ AWS Services Used
 
 | AWS Service | Purpose in Taskline |
@@ -88,6 +92,7 @@ Watch the complete demo of the project here:
 | **Amazon Route 53** | Provides DNS management and routes users to Taskline through a custom domain. |
 | **AWS Certificate Manager (ACM)** | Issues and manages the SSL/TLS certificate used to serve the application securely over HTTPS. |
 | **Security Groups** | Act as instance-level firewalls enforcing least-privilege access between the ALB, EC2, and RDS tiers. |
+
 
 ## 🔄 Project Workflow
 
@@ -156,6 +161,7 @@ Watch the complete demo of the project here:
 - **Git** – version control
 - **GitHub** – repository hosting
 
+
 ## 🐛 Challenges Solved
 
 Real issues encountered and resolved during this build — not a copy-pasted tutorial:
@@ -175,6 +181,7 @@ Real issues encountered and resolved during this build — not a copy-pasted tut
 ### Application Deployment
 - **Nginx 500 Internal Server Error** — caused by file permissions; Nginx runs as `www-data`, which lacked access to files under `/home/ubuntu/`. Diagnosed via `/var/log/nginx/error.log` (`Permission denied`) and resolved with directory permission changes up the full file path.
 - **Frontend couldn't reach the API despite the backend working correctly** — `curl` tests run directly on the EC2 instance confirmed both the backend and the Nginx reverse proxy were functioning. The actual bug was a hardcoded `localhost:4000` fallback in the frontend's API client, which caused the
+
 
 
 ## 🚀 Future Improvements
